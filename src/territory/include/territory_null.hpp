@@ -3,6 +3,6 @@
 
 #include <territory.hpp>
 
-const static Territory TERRITORY_NULL("INVALID TERRITORY");
+const static Territory TERRITORY_NULL();
 
 #endif // TERRITORY_NULL_HPP
