@@ -19,17 +19,14 @@ static gameModes gameMode;
 
 sf::RenderWindow window(sf::VideoMode(800, 600), "Kingdomination");
 
-const sf::Vector2f VECTOR_NOT_SET;
-
-sf::Vector2f lastMousePos;
+sf::Vector2f startingMousePos;
+sf::Vector2f startingViewCenter;
 
 int main(int argc, char *argv[]) {
 
     gameMode = editorMode;
 
     Editor editor;
-
-    lastMousePos = VECTOR_NOT_SET;
 
     editor.loadTexture("assets/map_test.png");
 
@@ -56,43 +53,27 @@ int main(int argc, char *argv[]) {
                 }
             }
 
-            if (event.type == sf::Event::MouseButtonReleased) {
+            if (event.type == sf::Event::MouseButtonPressed) {
                 if (event.mouseButton.button == sf::Mouse::Middle) {
-                    lastMousePos = VECTOR_NOT_SET;
+                    startingMousePos = (sf::Vector2f) sf::Mouse::getPosition(window);
+                    startingViewCenter = window.getView().getCenter();
                 }
             }
         }
 
         if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) { // View movement
-            if (lastMousePos == VECTOR_NOT_SET) {
-                lastMousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-            } else {
-                sf::View view = window.getView();
+            sf::View view = window.getView();
 
-                sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-                sf::Vector2f moveVector = lastMousePos - mousePos;
+            sf::Vector2f currMousePos = (sf::Vector2f) sf::Mouse::getPosition(window);
+            sf::Vector2f vectorStartToNow = currMousePos - startingMousePos;
 
-                view.move(moveVector);
-                window.setView(view);
+            vectorStartToNow.x *= view.getSize().x / (float) window.getSize().x; // Scale the movement because of the zoom
+            vectorStartToNow.y *= view.getSize().y / (float) window.getSize().y;
 
-                lastMousePos = mousePos;
-            }
+            view.setCenter(startingViewCenter - vectorStartToNow);
 
-            // sf::View view = window.getView();
-            // sf::Vector2u size = window.getSize();
-
-            // sf::Vector2f mousePos(sf::Mouse::getPosition(window));
-
-
-
-            // sf::Vector2f movement(mousePos.x / size.x / MOVEMENT_FACTOR - (.5f / MOVEMENT_FACTOR),
-            //                         mousePos.y / size.y / MOVEMENT_FACTOR - (.5f / MOVEMENT_FACTOR));
-            // view.move(movement);
-
-            // window.setView(view);
+            window.setView(view);
         }
-
-        std::cout << window.getView().getCenter().x << ", " << window.getView().getCenter().y << std::endl;
 
         window.clear();
 
