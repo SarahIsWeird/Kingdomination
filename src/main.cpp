@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
 
         if (sf::Mouse::isButtonPressed(sf::Mouse::Middle)) { // View movement
             if (lastMousePos == VECTOR_NOT_SET) {
-                lastMousePos = window.mapPixelToCoords(sf::Mouse::getPosition());
+                lastMousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
             } else {
                 sf::View view = window.getView();
 
