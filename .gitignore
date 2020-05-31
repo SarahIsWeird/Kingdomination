@@ -1,10 +1,4 @@
-sfml-graphics-2.dll
-sfml-system-2.dll
-sfml-window-2.dll
 build/*
 .vscode/
-Kingdomination.exe
-Kingdomination.exe
-sfml-graphics-2.dll
-sfml-system-2.dll
-sfml-window-2.dll
+*.exe
+*.dll
